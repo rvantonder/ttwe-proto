@@ -1,3 +1,5 @@
+#TTWEClient by Rijnard van Tonder 2014
+
 import os
 import stat
 import time
@@ -85,13 +87,13 @@ class TTWEClientDevice:
       self.file_log.write("<<[0] %s" % self.snd)
       self.file_log.flush()
       if self.verbose:
-        print("Sending %s to ep0 of STICK" % self.snd)
+        print("Sending %s to ep0 of PERIPH" % self.snd)
 
     if len(self.snd_ep1_data) > 1:
       self.file_log.write("<<[1] %s" % self.snd_ep1_data)
       self.file_log.flush()
       if self.verbose:
-        print("Sending %s to ep1 of STICK" % self.snd_ep1_data)
+        print("Sending %s to ep1 of PERIPH" % self.snd_ep1_data)
 
     self.write_ep0_snd.write(self.snd) # send '\n' if no data
     self.write_ep0_snd.flush()
@@ -159,15 +161,15 @@ class TTWEClientDevice:
 
         # configured, or lun
         if not self.configured or (len(rcv) == 1 and rcv[0] == 0): # send on ep 0
-          if len(rcv) != 1: # if it is, its the lun
+          if len(rcv) != 1: # if it is, its the lun, for mass storage devices
             if rcv[1] == 2: # hijack interface
              
               if self.verbose:  
-                print('hijacking endpoint descriptor, mapping to maxusb: %s' % rcv)
+                print('Hijacking endpoint descriptor, mapping to maxusb: %s' % rcv)
               rcv = self.hijack_ep(rcv) # will be sent on endpoint 0
 
           if self.verbose:
-            print('Reply from STICK is %s\nString:%s' % (rcv, ''.join(map(chr, rcv))))
+            print('Reply from PERIPH is %s\nString:%s' % (rcv, ''.join(map(chr, rcv))))
 
           u.send_on_endpoint(0x0, bytes(rcv)) 
 
@@ -212,7 +214,7 @@ class TTWEClientDevice:
       # 2ND ENDPOINT IF DETECTED:
       if len(rest) > 0:
         endpoint_b = rest[:rest[0]] # if there's still left, get it
-        rest = rest[rest[0]:] # set start to endpoint co, if there is
+        rest = rest[rest[0]:] # set start to endpoint index
 
         offset_b = 0x9 + 0x9 + 0x7 + 0x3 - 1
 

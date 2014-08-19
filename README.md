@@ -13,13 +13,16 @@ Create the necessary pipes for the driver communiction. For instance:
 	$ sudo ./create_pipes.sh
 
 You need Python 2.7 for the host emulation driver, and Python 3 for the client emulation driver. Future
-changes will use only Python 3. The client and host drivers are built on top of the GoodFET software for 
-the Facedancer.
+changes will use only Python 3. 
 
 	$ sudo python3 TTWEClient.py (True|False) # flag elects to fuzz the host during enumeration phase
 	$ sudo python TTWEHost.py
 
 ### Notes
+
+The client and host drivers are built on top of the GoodFET software for 
+the Facedancer. A series of callbacks in the ```service_irqs``` functions of GoodFETMAXUSB.py and
+MAXUSBApp.py refer to the functions in TTWEHost.py and TTWEClient.py repsectively. 
 
 You may need to change the HostRelayDevice endpoint numbers to correspond with those specified in the 
 endpoint descriptor of the original peripheral if you want to fiddle with bulk or interrupt transfers.

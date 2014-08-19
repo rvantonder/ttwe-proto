@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-
-#GoodFET MAXIM MAX3421 Host
-#by Travis Goodspeed
+#TTWEHost by Rijnard van Tonder 2014
 
 import time
 import os
@@ -29,6 +26,8 @@ class HostRelayDevice:
   OUT_EP = 0x1
   IN_EP = 0x2
   IN2_EP = 0x3
+  
+  verbose = True
 
   read_ep0_snd = open("/tmp/ep0_snd", "r")
   write_ep0_rcv = open("/tmp/ep0_rcv", "w")
@@ -92,7 +91,7 @@ class HostRelayDevice:
       # TODO add clear_feature request
 
       print('Sending %s' % rcv)
-      status = client.ctl_read(rcv) # ctl_read confusingly sends a request to device (it's not a write, its a get_ request)
+      status = client.ctl_read(rcv) # ctl_read reads a request from the device
       print('Done checking, status: %s' % status)
 
       if status:
@@ -101,32 +100,22 @@ class HostRelayDevice:
       if rcv[0] == 161 and rcv[1] == 254:
         print('CONFIGURED!')
 
-    #EP1OUT HANDLER - this is going to need to use DATA toggles :/
     if len(self.rcv_ep1_data) > 3: # The device is using ep2, we are getting it from ep according to map
-#     print 'Performing EP1OUT handler'
       rcv = eval(self.rcv_ep1_data) # TODO serialize properly
 
-      if 1: # verbose
+      if self.verbose:
         print('writing OUT data %s to EP%d' % (rcv,self.OUT_EP))
       client.OUT_Transfer(self.OUT_EP, rcv) # read_data in response to this
 
   def read_data_into_rcv_buffer(self):
-    # after issuing OUT_Transfer, call IN_Transfer. Actually, in event loop
-    # call IN_transfer every time so we can keep reading multiple responses. 
-    # only EP 0x1 for now :/
-#   print 'reading IN_EP into rcv buffer'
+    # after issuing OUT_Transfer, call IN_Transfer.
     client.read_data(self.IN_EP)
-#   print 'reading IN2_EP into rcv buffer'
     client.read_data(self.IN2_EP)
 
   def handle_rcv_data_available(self, data, endpoint):
-    # can expect the data is EP0 when ctl_read was launched above
-    # else EPIN data -> other side will figure it out
-#   print "FROM EP[%d]: %s" % (endpoint, data)
-    if 1: # verbose
+    if self.verbose
       print('Got data: %s, EP%d' % (data, endpoint))
     if endpoint == 0:
-      print("Got data on ep 0, Sending to ep0 immediately")
       self.snd = str(data)+'\n'
       self.write_ep0_rcv.write(self.snd)
       self.write_ep0_rcv.flush()
@@ -156,6 +145,6 @@ if __name__ == '__main__':
 
   client.reset_bus()
 
-  print('done soft enumerate, deferring to irqs')
+  print('done enumerating, deferring to irqs')
   client.service_irqs()
   client.usb_disconnect()
