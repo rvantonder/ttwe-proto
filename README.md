@@ -25,11 +25,14 @@ You may need to change the HostRelayDevice endpoint numbers to correspond with t
 endpoint descriptor of the original peripheral if you want to fiddle with bulk or interrupt transfers.
 
 E.g.:
+
   OUT_EP = 0x1
+  
   IN_EP = 0x2
+  
   IN2_EP = 0x3
   
-Communication output is placed in $ usbcomms.log
+Communication output is placed in `usbcomms.log`
 
 ### License
 
