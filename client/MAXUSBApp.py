@@ -181,9 +181,7 @@ class MAXUSBApp(FacedancerApp):
 
             data = data[64:]
 
-#        print('bing')
         self.write_bytes(fifo_reg, data)
-#        print('boom')
         if ep_num == 0:
           self.write_register(bc_reg, len(data), ack=True)
         else:
@@ -192,20 +190,6 @@ class MAXUSBApp(FacedancerApp):
         if self.verbose > 1:
             print(self.app_name, "wrote", bytes_as_hex(data), "to endpoint",
                     ep_num)
-
-    def send_on_endpoint_key(self, ep_num, data):
-      fifo_reg = self.reg_ep3_in_fifo
-      bc_reg = self.reg_ep3_in_byte_count
-
-      self.write_bytes(fifo_reg, b'\x00')
-      self.write_bytes(fifo_reg, b'\x00')
-      self.write_bytes(fifo_reg, data)
-      self.write_register(bc_reg, 3, ack=True)
-
-#     self.write_bytes(fifo_reg, b'\x00')
-#     self.write_bytes(fifo_reg, b'\x00')
-#     self.write_bytes(fifo_reg, b'\x00') # key up
-#     self.write_register(bc_reg, 3, ack=True)
 
     # HACK: but given the limitations of the MAX chips, it seems necessary
     def read_from_endpoint(self, ep_num):
