@@ -6,9 +6,11 @@ as many changes need to be made to improve maintainability and usability. You ha
 It is provided as an early taster for the very curious, until the aforementioned changes
 make it suitable for mass consumption.
 
+For a full description, please refer to the WOOT paper: https://www.usenix.org/system/files/conference/woot14/woot14-vantonder.pdf
+
 ### Running it
 
-Create the necessary pipes for the driver communiction. For instance:
+Create the necessary pipes for the driver communication. For instance:
 
 	$ sudo ./create_pipes.sh
 
@@ -35,6 +37,12 @@ E.g.:
  ```
   
 Communication output is placed in `usbcomms.log`
+
+Here is a diagram of the concept:
+
+![logo](https://raw.github.com/rvantonder/ttwe-proto/master/ttwe-mitm.png)
+
+
 
 ### License
 
