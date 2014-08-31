@@ -113,7 +113,7 @@ class HostRelayDevice:
     client.read_data(self.IN2_EP)
 
   def handle_rcv_data_available(self, data, endpoint):
-    if self.verbose
+    if self.verbose:
       print('Got data: %s, EP%d' % (data, endpoint))
     if endpoint == 0:
       self.snd = str(data)+'\n'

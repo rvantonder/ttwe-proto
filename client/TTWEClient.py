@@ -22,7 +22,7 @@ def signal_handler(signal, frame):
 
 class TTWEClientDevice:
 
-  verbose = False
+  verbose = True
 
   name = "TTWEClient Device"
 

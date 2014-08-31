@@ -17,6 +17,8 @@ Create the necessary pipes for the driver communication. For instance:
 You need Python 2.7 for the host emulation driver, and Python 3 for the client emulation driver. Future
 changes will use only Python 3. 
 
+Plug the *HOST* emluating Facedancer in first, which will register as ttyUSB0.
+
 	$ sudo python3 TTWEClient.py (True|False) # flag elects to fuzz the host during enumeration phase
 	$ sudo python TTWEHost.py
 
