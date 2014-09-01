@@ -36,7 +36,7 @@ Plug the **HOST** emluating Facedancer in first, which will register as ttyUSB0.
   optional arguments:
     -h, --help     show this help message and exit
     -v, --verbose  turn on verbose output of USB communication
-    --fuzz FUZZ    endpoint to be fuzzed
+    --fuzz FUZZ    endpoint to be fuzzed (0 for device enumeration phase)
   ```
 
 ### Notes
@@ -47,14 +47,9 @@ MAXUSBApp.py refer to the functions in TTWEHost.py and TTWEClient.py repsectivel
 
 You may need to change the HostRelayDevice endpoint numbers to correspond with those specified in the 
 endpoint descriptor of the original peripheral if you want to fiddle with bulk or interrupt transfers.
+This can be done with the `--OUT`, `--IN`, and `--IN2` options. The Facedancer supports up to one OUT
+endpoint and two IN endpoints, which should suffice for most USB peripherals.
 
-E.g.:
-```
-  OUT_EP = 0x1
-  IN_EP = 0x2
-  IN2_EP = 0x3
- ```
-  
 Communication output is placed in `usbcomms.log`
 
 Here is a diagram of the concept:

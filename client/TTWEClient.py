@@ -267,7 +267,7 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument("-v", "--verbose", action="store_true",
       help="turn on verbose output of USB communication")
-  parser.add_argument("--fuzz", type=int, default=-1, help="endpoint to be fuzzed")
+  parser.add_argument("--fuzz", type=int, default=-1, help="endpoint to be fuzzed (0 for device enumeration phase)")
 
   args = parser.parse_args()
 
