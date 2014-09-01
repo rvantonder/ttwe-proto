@@ -140,12 +140,15 @@ class HostRelayDevice:
       self.snd_ep3_data = '\n'
 
 if __name__ == '__main__':
+
+  signal.signal(signal.SIGINT, signal_handler)
+
   parser = argparse.ArgumentParser()
   parser.add_argument("-v", "--verbose", action="store_true", 
       help="turn on verbose output of USB communication")
-  parser.add_argument("--OUT", type=int, default=1, help="Peripheral OUT Endpoint number")
-  parser.add_argument("--IN", type=int, default=2, help="Peripheral IN Endpoint number")
-  parser.add_argument("--IN2", type=int, default=3, help="Peripheral IN2 Endpoint number")
+  parser.add_argument("--OUT", type=int, default=1, help="peripheral OUT Endpoint number")
+  parser.add_argument("--IN", type=int, default=2, help="peripheral IN Endpoint number")
+  parser.add_argument("--IN2", type=int, default=3, help="peripheral IN2 Endpoint number")
 
   args = parser.parse_args()
 

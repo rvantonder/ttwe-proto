@@ -3,15 +3,14 @@
 import os
 import stat
 import time
+import sys
+import signal
+import random
+import subprocess
+import argparse
 
 from Facedancer import *
 from MAXUSBApp import *
-import sys
-
-import signal
-import random
-
-import subprocess
 
 global u
 
@@ -44,8 +43,15 @@ class TTWEClientDevice:
 
   start = True
 
-  fuzz_ep0 = eval(sys.argv[1]) 
+  fuzz_ep0 = False 
   fuzz_ep1 = False
+
+  def __init__(self, verbose, fuzz):
+    self.verbose = verbose
+    if fuzz == 0:
+      self.fuzz_ep0 = True
+    elif fuzz == 1:
+      self.fuzz_ep1 = True
 
   def flip_bits(self, l):
     l = eval(l[:-1])
@@ -67,7 +73,7 @@ class TTWEClientDevice:
       self.rcv = self.read_ep0_rcv.readline() # '\n' if no data
       if len(self.rcv) > 1:
         if self.fuzz_ep0:
-          if random.random() < .5: # flip with 50/50 probability for mass storage
+          if random.random()*2 < 1: # flip with 50/50 probability during enumeration (EP0)
             self.rcv = self.flip_bits(self.rcv)
 
         self.file_log.write(">>[0] %s" % self.rcv)
@@ -77,7 +83,7 @@ class TTWEClientDevice:
       self.rcv_ep3_data = self.rcv_ep3.readline()
       if len(self.rcv_ep3_data) > 1:
         if self.fuzz_ep1:
-          if random.random()*50 < 1: 
+          if random.random()*50 < 1: # 1/50 chance to flip during EP1 data transfer
             self.rcv_ep3_data = self.flip_bits(self.rcv_ep3_data)
 
         self.file_log.write(">>[3] %s" % self.rcv_ep3_data)
@@ -258,12 +264,19 @@ if __name__ == '__main__':
 
   signal.signal(signal.SIGINT, signal_handler)
 
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-v", "--verbose", action="store_true",
+      help="turn on verbose output of USB communication")
+  parser.add_argument("--fuzz", type=int, default=-1, help="endpoint to be fuzzed")
+
+  args = parser.parse_args()
+
   sp = GoodFETSerialPort()
   fd = Facedancer(sp, verbose=1)
   u = MAXUSBApp(fd, verbose=1)
 
   print("Attempting connection")
-  u.connect(TTWEClientDevice())
+  u.connect(TTWEClientDevice(args.verbose, args.fuzz))
   print("Done connecting")
   u.service_irqs()
   print ("Running")

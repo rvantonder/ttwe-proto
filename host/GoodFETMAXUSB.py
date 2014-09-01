@@ -638,7 +638,7 @@ class GoodFETMAXUSBHost(GoodFETMAXUSB):
         self.wreg(rPERADDR,addr)       # now all transfers go to addr 7
         self.first_time = False
 
-      print("All transfers now go to %d" % addr)
+      #print("All transfers now go to %d" % addr)
 
     def reset_bus(self):
         print("Bus will now reset")
