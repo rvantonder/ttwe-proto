@@ -359,7 +359,7 @@ class GoodFETMAXUSB(GoodFET):
         self.writebytes(rSUDFIFO,request); # something bricks
         #print "Sending packet with tokSETUP to EP0..."
         resultcode=self.send_packet(tokSETUP,0); #SETUP packet to EP0.
-        print('Performed ctl_write_nd with %s, result: %s' % (request, resultcode))
+        #print('Performed ctl_write_nd with %s, result: %s' % (request, resultcode))
         #print "result code of SETUP packet: %d" % resultcode
         if resultcode: return resultcode;
 
@@ -369,7 +369,7 @@ class GoodFETMAXUSB(GoodFET):
         # When we get back to the DATA1 PID the 3421 automatically
         # sends the closing NAK.
         resultcode=self.send_packet(tokINHS,0); #Function takes care of retries.
-        print('Performed ctl_write_nd part 2 with %s, result: %s' % (request, resultcode))
+        #print('Performed ctl_write_nd part 2 with %s, result: %s' % (request, resultcode))
         #print "result code of status after: %d" % resultcode
         if resultcode: return resultcode;
         
@@ -407,7 +407,7 @@ class GoodFETMAXUSB(GoodFET):
             print("Failed on OUT Status stage in ctl_read()")
             return resultcode;
 
-        print("Successful complete control read")
+        # print("Successful complete control read") # TODO add verbose
         
         return 0; #Success
 
@@ -455,9 +455,8 @@ class GoodFETMAXUSB(GoodFET):
           self.callback.handle_rcv_data_available(data, endpoint)
           data = []
 
-        # want it to break for scsi, why would i not want it to break?
         if bytes_to_transfer < 64: 
-          print('bytes to transfer less than 64, breaking')
+          #print('bytes to transfer less than 64, breaking') #TODO add verbose
           break
 
         if bytes_to_transfer == 0:
@@ -482,7 +481,7 @@ class GoodFETMAXUSB(GoodFET):
         self.writebytes(rSNDBC, [c])
         count = count - c
 
-        print("Hitting tokOUT to endpoint %d" % endpoint)
+        #print("Hitting tokOUT to endpoint %d" % endpoint) # TODO add verbose
         resultcode = self.send_packet(tokOUT,endpoint) # will take care of NAKs and retries
         if resultcode: print("Error in OUT transfer: %d" % resultcode)
 
