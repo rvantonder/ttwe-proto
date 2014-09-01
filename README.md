@@ -19,8 +19,25 @@ changes will use only Python 3.
 
 Plug the **HOST** emluating Facedancer in first, which will register as ttyUSB0.
 
-	$ sudo python3 TTWEClient.py (True|False) # flag elects to fuzz the host during enumeration phase
-	$ sudo python TTWEHost.py
+	$ sudo python TTWEHost.py [-h] [-v] [--OUT OUT] [--IN IN] [--IN2 IN2]
+
+  ``` 
+  optional arguments:
+    -h, --help     show this help message and exit
+    -v, --verbose  turn on verbose output of USB communication
+    --OUT OUT      peripheral OUT Endpoint number
+    --IN IN        peripheral IN Endpoint number
+    --IN2 IN2      peripheral IN2 Endpoint number
+  ```
+
+	$ sudo python3 TTWEClient.py [-h] [-v] [--fuzz FUZZ]
+
+  ```
+  optional arguments:
+    -h, --help     show this help message and exit
+    -v, --verbose  turn on verbose output of USB communication
+    --fuzz FUZZ    endpoint to be fuzzed
+  ```
 
 ### Notes
 
